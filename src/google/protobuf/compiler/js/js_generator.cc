@@ -2049,6 +2049,7 @@ void Generator::GenerateClass(const GeneratorOptions& options,
     GenerateClassFieldInfo(options, printer, desc);
 
     GenerateClassToObject(options, printer, desc);
+    GenerateClassFromObject(options, printer, desc);
     // These must come *before* the extension-field info generation in
     // GenerateClassRegistration so that references to the binary
     // serialization/deserialization functions may be placed in the extension
@@ -2479,8 +2480,6 @@ void Generator::GenerateObjectTypedef(const GeneratorOptions& options,
 void Generator::GenerateClassFromObject(const GeneratorOptions& options,
                                         io::Printer* printer,
                                         const Descriptor* desc) const {
-  printer->Print("if (jspb.Message.GENERATE_FROM_OBJECT) {\n\n");
-
   GenerateObjectTypedef(options, printer, desc);
 
   printer->Print(
@@ -2503,8 +2502,7 @@ void Generator::GenerateClassFromObject(const GeneratorOptions& options,
 
   printer->Print(
       "  return msg;\n"
-      "};\n"
-      "}\n\n");
+      "};\n\n");
 }
 
 void Generator::GenerateClassFieldFromObject(
@@ -2664,10 +2662,30 @@ void Generator::GenerateClassField(const GeneratorOptions& options,
 
     printer->Print("));\n");
 
+    printer->Print("};\n\n");
+
     printer->Print(
-        "};\n"
-        "\n"
-        "\n");
+            "/**\n"
+            " * @param {!jspb.Map<$keytype$,$valuetype$>} value\n"
+            " * The jspb.Map to set into\n"
+            " * @return {$class$}\n"
+            " */\n",
+            "keytype", key_type,
+            "valuetype", value_type,
+            "class", GetMessagePath(options, field->containing_type()));
+    printer->Print(
+            "$class$.prototype.$settername$ = function(value) {\n"
+            "  return /** @type {$class$} */ (\n",
+            "class", GetMessagePath(options, field->containing_type()),
+            "settername", "set" + JSGetterName(options, field),
+            "keytype", key_type,
+            "valuetype", value_type);
+    printer->Annotate("gettername", field);
+    printer->Print(
+            "      jspb.Message.setField(this, $index$, value));\n",
+            "index", JSFieldIndex(field));
+
+    printer->Print("};\n\n");
   } else if (field->cpp_type() == FieldDescriptor::CPPTYPE_MESSAGE) {
     // Message field: special handling in order to wrap the underlying data
     // array with a message object.
@@ -2889,7 +2907,7 @@ void Generator::GenerateClassField(const GeneratorOptions& options,
         " */\n"
         "$class$.prototype.$clearername$ = function() {\n"
         "  this.$gettername$().clear();\n"
-        "  return this;"
+        "  return this;\n"
         "};\n"
         "\n"
         "\n",
