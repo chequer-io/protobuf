@@ -112,14 +112,6 @@ std::string GetJSFilename(const GeneratorOptions& options,
 // path ../../
 std::string GetRootPath(const std::string& from_filename,
                         const std::string& to_filename) {
-  if (to_filename.find("google/protobuf") == 0) {
-    // Well-known types (.proto files in the google/protobuf directory) are
-    // assumed to come from the 'google-protobuf' npm package.  We may want to
-    // generalize this exception later by letting others put generated code in
-    // their own npm packages.
-    return "google-protobuf/";
-  }
-
   size_t slashes = std::count(from_filename.begin(), from_filename.end(), '/');
   if (slashes == 0) {
     return "./";
