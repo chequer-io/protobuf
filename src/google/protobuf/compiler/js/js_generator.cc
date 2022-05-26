@@ -3437,6 +3437,9 @@ void Generator::GenerateEnum(const GeneratorOptions& options,
     const EnumValueDescriptor* value = enumdesc->value(i);
     printer->Print("  $name$: $value$$comma$\n", "name",
                    ToEnumCase(value->name()), "value", StrCat(value->number()),
+                   "comma", ",");
+    printer->Print("  $name$: $value$$comma$\n", "name",
+                   StrCat(value->number()), "value", ToEnumCase(value->name()),
                    "comma", (i == valid_index.back()) ? "" : ",");
     printer->Annotate("name", value);
   }
