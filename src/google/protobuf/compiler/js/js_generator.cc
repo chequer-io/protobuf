@@ -2090,7 +2090,7 @@ void Generator::GenerateClassConstructor(const GeneratorOptions& options,
       " * @extends {jspb.Message}\n"
       " * @constructor\n"
       " */\n"
-      "$classprefix$$classname$ = function(opt_data) {\n",
+      "$classprefix$$classname$ = function $classname$(opt_data) {\n",
       "classprefix", GetMessagePathPrefix(options, desc), "classname",
       desc->name());
   printer->Annotate("classname", desc);
@@ -3436,10 +3436,10 @@ void Generator::GenerateEnum(const GeneratorOptions& options,
   for (auto i : valid_index) {
     const EnumValueDescriptor* value = enumdesc->value(i);
     printer->Print("  $name$: $value$$comma$\n", "name",
-                   ToEnumCase(value->name()), "value", StrCat(value->number()),
+                   value->name(), "value", StrCat(value->number()),
                    "comma", ",");
     printer->Print("  $name$: \"$value$\"$comma$\n", "name",
-                   StrCat(value->number()), "value", ToEnumCase(value->name()),
+                   StrCat(value->number()), "value", value->name(),
                    "comma", (i == valid_index.back()) ? "" : ",");
     printer->Annotate("name", value);
   }
