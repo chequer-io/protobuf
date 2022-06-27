@@ -2212,7 +2212,13 @@ void Generator::GenerateOneofCaseDefinition(
     printer->Print(
         ",\n"
         "  $upcase$: $number$",
-        "upcase", ToEnumCase(oneof->field(i)->name()), "number",
+        "upcase", oneof->field(i)->name(), "number",
+        JSFieldIndex(oneof->field(i)));
+
+    printer->Print(
+        ",\n"
+        "  $number$: $upcase$",
+        "upcase", oneof->field(i)->name(), "number",
         JSFieldIndex(oneof->field(i)));
     printer->Annotate("upcase", oneof->field(i));
   }
