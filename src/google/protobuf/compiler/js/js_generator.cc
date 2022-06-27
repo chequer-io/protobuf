@@ -509,6 +509,11 @@ bool IgnoreOneof(const OneofDescriptor* oneof) {
   return true;
 }
 
+bool InRealOneof(const FieldDescriptor* field) {
+    return field->containing_oneof() &&
+           !field->containing_oneof()->is_synthetic();
+}
+
 std::string JSIdent(const GeneratorOptions& options,
                     const FieldDescriptor* field, bool is_upper_camel,
                     bool is_map, bool drop_list) {
@@ -519,7 +524,7 @@ std::string JSIdent(const GeneratorOptions& options,
                ? ToUpperCamel(ParseUpperCamel(field->message_type()->name()))
                : ToLowerCamel(ParseUpperCamel(field->message_type()->name()));
   } else {
-      if (field->containing_oneof() != nullptr || (is_upper_camel && IsUpperCamel(field->name()))) {
+      if (InRealOneof(field) || (is_upper_camel && IsUpperCamel(field->name()))) {
           result = field->name();
       } else if (is_upper_camel && IsLowerCamel(field->name())) {
           result = ToUpperCamel(ParseLowerCamel(field->name()));
@@ -839,11 +844,6 @@ std::string FloatToString(float value) {
 std::string DoubleToString(double value) {
   std::string result = SimpleDtoa(value);
   return PostProcessFloat(result);
-}
-
-bool InRealOneof(const FieldDescriptor* field) {
-  return field->containing_oneof() &&
-         !field->containing_oneof()->is_synthetic();
 }
 
 // Return true if this is an integral field that should be represented as string
