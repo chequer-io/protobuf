@@ -519,7 +519,7 @@ std::string JSIdent(const GeneratorOptions& options,
                ? ToUpperCamel(ParseUpperCamel(field->message_type()->name()))
                : ToLowerCamel(ParseUpperCamel(field->message_type()->name()));
   } else {
-      if (is_upper_camel && IsUpperCamel(field->name())) {
+      if (field->containing_oneof() != nullptr || (is_upper_camel && IsUpperCamel(field->name()))) {
           result = field->name();
       } else if (is_upper_camel && IsLowerCamel(field->name())) {
           result = ToUpperCamel(ParseLowerCamel(field->name()));
