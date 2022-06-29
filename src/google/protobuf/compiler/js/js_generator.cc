@@ -2413,7 +2413,7 @@ void Generator::GenerateClassFieldToObject(const GeneratorOptions& options,
   } else if (field->type() == FieldDescriptor::TYPE_BYTES) {
     // For bytes fields we want to always return the B64 data.
     printer->Print("msg.get$getter$()", "getter",
-                   JSGetterName(options, field, BYTES_B64));
+                   JSGetterName(options, field, BYTES_U8));
   } else {
     bool use_default = field->has_default_value();
 
