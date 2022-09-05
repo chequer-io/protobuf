@@ -65,7 +65,7 @@ jobs:
         distribution: 'adopt'
 
     - name: Setup ninja
-      if: matrix.language == 'ㅓㅁㅍㅁ'
+      if: matrix.language == 'java'
       uses: seanmiddleditch/gha-setup-ninja@master
 
     - name: Build Java
