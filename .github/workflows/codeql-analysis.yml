@@ -71,6 +71,7 @@ jobs:
     - name: Build Java
       if: matrix.language == 'java'
       run: |
+        sudo apt-get install g++ git
         cmake -G "Ninja" -DCMAKE_BUILD_TYPE=Release
         ninja
         cp ./protoc ./src/protoc
