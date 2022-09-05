@@ -67,6 +67,10 @@ jobs:
     - name: Build Java
       if: matrix.language == 'java'
       run: |
+        cmake -G "Ninja" -DCMAKE_BUILD_TYPE=Release
+        ninja
+        ninja install
+
         cd java
         mvn install
         mvn package
