@@ -76,7 +76,7 @@ jobs:
         ninja
         cp ./protoc ./src/protoc
 
-        ninja install
+        sudo ninja install
 
         cd java
         mvn install
