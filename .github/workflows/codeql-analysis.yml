@@ -54,7 +54,24 @@ jobs:
     # Autobuild attempts to build any compiled languages  (C/C++, C#, or Java).
     # If this step fails, then you should remove it and run the build manually (see below)
     - name: Autobuild
+      if: matrix.language != 'java'
       uses: github/codeql-action/autobuild@v2
+
+    - name: Setup Java
+      if: matrix.language == 'java'
+      uses: actions/setup-java@v3
+      with:
+        java-version: '11'
+        distribution: 'adopt'
+
+    - name: Build Java
+      if: matrix.language == 'java'
+      run: |
+        cd java
+        mvn install
+        mvn package
+        cp -r ./target/* /home/runner/work/_temp/codeql_databases/java/
+        
 
     # ℹ️ Command-line programs to run using the OS shell.
     # 📚 See https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#jobsjob_idstepsrun
