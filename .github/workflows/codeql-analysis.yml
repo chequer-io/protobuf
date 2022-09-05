@@ -64,6 +64,10 @@ jobs:
         java-version: '11'
         distribution: 'adopt'
 
+    - name: Setup ninja
+      if: matrix.language == 'ㅓㅁㅍㅁ'
+      uses: seanmiddleditch/gha-setup-ninja@master
+
     - name: Build Java
       if: matrix.language == 'java'
       run: |
