@@ -73,6 +73,8 @@ jobs:
       run: |
         cmake -G "Ninja" -DCMAKE_BUILD_TYPE=Release
         ninja
+        cp ./protoc ./src/protoc
+
         ninja install
 
         cd java
